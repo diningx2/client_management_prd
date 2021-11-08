@@ -67,7 +67,7 @@ if st.session_state['login'] == 0:
     user_name = st.text_input('user name')
     password = st.text_input('password', type="password")
     login_button = st.button('login')
-    st.write(login_pass_list)
+
     if login_button:
         if user_name not in login_pass_list.keys():
             st.write('user nameが存在しません')
