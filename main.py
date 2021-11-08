@@ -97,7 +97,10 @@ if st.session_state['login'] == 1:
             if 'file' not in st.session_state:
                 file = get_data(st.session_state['db'], st.session_state['user_name'], st.session_state['b_or_c'])
                 st.session_state['file'] = file
-            heatmaps(st.session_state['file'])
+            if len(st.session_state['file']) == 0:
+                st.write('表示するアンケートがありません')
+            else:
+                heatmaps(st.session_state['file'])
         
         if option == '時系列可視化':
             if 'file' not in st.session_state:
