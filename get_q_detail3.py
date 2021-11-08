@@ -94,6 +94,7 @@ def filter_df(file, gender, affiliation, age_list):
 
 def daterange(_start, _end):
     for n in range((_end - _start).days):
+        print(n)
         yield _start + timedelta(n)
 
 pd.get_option("display.max_columns")
@@ -152,8 +153,11 @@ def get_q_detail(file):
         #st.dataframe(st.session_state['file_review'])
         start_ = st.session_state['file_review']['date'].min()
         end_ = st.session_state['file_review']['date'].max()
-    
-        date_range = np.sort(list(set([dt.strptime(str(i.year)+'-'+str(i.month)+'-'+'01', '%Y-%m-%d') for i in list(daterange(start_, end_))])))
+
+        start__ = dt.strptime(start_, '%Y-%m-%d') 
+        end__ = dt.strptime(end_, '%Y-%m-%d') 
+        
+        date_range = np.sort(list(set([dt.strptime(str(i.year)+'-'+str(i.month)+'-'+'01', '%Y-%m-%d') for i in list(daterange(start__, end__))])))
         date_option = [str(i)[:7].replace('-','/') for i in date_range]
         date_option = [i+'/01' for i in date_option]
      
@@ -175,6 +179,8 @@ def get_q_detail(file):
         start = dt.strptime(str(start_sp[0])+'-'+str(start_sp[1])+'-'+'01', '%Y-%m-%d')
         end = dt.strptime(str(end_sp[0])+'-'+str(end_sp[1])+'-'+'01', '%Y-%m-%d')
 
+        print(type(start))
+        print(type(show_df['date'][0]))
         if start > end:
             start, end = end, start
         elif start == end:
@@ -211,4 +217,3 @@ def get_q_detail(file):
         st.table(show_df)
         st.sidebar.write('レビュー表示件数：' + str(len(show_df)), ' 件')
     #st.table(st.session_state['file_review'][['年齢', '性別', '職業', 'レビュー']])
-    

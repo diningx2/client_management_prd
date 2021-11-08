@@ -8,6 +8,7 @@ from get_data import get_data
 from time_series import time_series
 from lottery_settings import lottery_settings
 from get_q_detail import get_q_detail
+from get_q_detail2 import get_q_detail2 
 import os
 import json
 from stqdm import stqdm
@@ -66,6 +67,7 @@ if st.session_state['login'] == 0:
     user_name = st.text_input('user name')
     password = st.text_input('password', type="password")
     login_button = st.button('login')
+    st.write(login_pass_list)
     if login_button:
         if user_name not in login_pass_list.keys():
             st.write('user nameが存在しません')
@@ -101,13 +103,20 @@ if st.session_state['login'] == 1:
             if 'file' not in st.session_state:
                 file = get_data(st.session_state['db'], st.session_state['user_name'], st.session_state['b_or_c'])
                 st.session_state['file'] = file
-            time_series(st.session_state['file'])
+            if len(st.session_state['file']) == 0:
+                st.write('表示するアンケートがありません')
+            else:
+                time_series(st.session_state['file'])
         
         if option == 'レビュー個別表示':
             if 'file' not in st.session_state:
                 file = get_data(st.session_state['db'], st.session_state['user_name'], st.session_state['b_or_c'])
                 st.session_state['file'] = file
-            get_q_detail(st.session_state['file'])
+
+            if len(st.session_state['file']) == 0:
+                st.write('表示するアンケートがありません')
+            else:
+                get_q_detail(st.session_state['file'])
 
         if option == '各種設定':
             lottery_settings(st.session_state['db'], st.session_state['user_name'], st.session_state['b_or_c'])

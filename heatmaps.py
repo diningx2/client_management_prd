@@ -4,6 +4,8 @@ import pandas as pd
 from user_heatmap import get_heatmap, get_starmap, get_heat_matrix, get_aspectmap, get_seibetsu, get_shozoku, get_nenrei, get_kyojuchi, get_hoshi, get_sentiment_bar
 from freq_words_extract import get_freq_words, no_a, no_n, no_v
 from janome.tokenizer import Tokenizer
+import datetime
+from datetime import datetime as dt
 
 
 def get_hinshi(text):
@@ -42,18 +44,19 @@ def heatmaps(file):
     logout_button = st.sidebar.button('log out')
     if logout_button:
         st.session_state['login'] = 0
-    st.dataframe(file[['年齢', '性別', '職業', 'レビュー']])
+    st.dataframe(file[['年齢', '性別', '職業', 'レビュー', 'time']])
     
     heat_matrix = get_heat_matrix(file)
     
-    if 'file_review' not in st.session_state:
+    if 'file_review_' not in st.session_state:
         file_review = file[file['Ambience#Decoration']!='-']
-        st.session_state['file_review'] = file_review[['年齢', '性別', '職業', 'レビュー']]
+        st.session_state['file_review_'] = file_review[['年齢', '性別', '職業', 'レビュー', '星評価', '居住地', 'time']]
+        st.session_state['file_review_']['date'] = st.session_state['file_review_']['time']
         keys = []
-        for i in st.session_state['file_review']['レビュー']:
+        for i in st.session_state['file_review_']['レビュー']:
             keys.append(get_hinshi(i))
         CONTENT = ' '.join(keys)
-        st.session_state['file_review']['janome'] = keys
+        st.session_state['file_review_']['janome'] = keys
         
         st.session_state['CONTENT'] = CONTENT
     
